@@ -1,0 +1,33 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<body class="dark">
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>09</b><span>Verified against the running lab</span></div>
+<h1>Not a diagram &mdash; <em>actual status codes</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+<pre class="tight">NO TOKEN     /api/public          -&gt; 200
+             /api/me              -&gt; 401
+ALICE        /api/me              -&gt; 200
+  app-user   /api/admin/report    -&gt; <span class="c-hit">403</span>   <span class="c-com"># valid token, missing role</span>
+BOB          /api/me              -&gt; 200
+  + admin    /api/admin/report    -&gt; 200
+GARBAGE      /api/me              -&gt; 401   <span class="c-com"># "Malformed token"</span>
+WRONG aud    /api/me              -&gt; 401   <span class="c-com"># "The aud claim is not valid"</span>
+
+<span class="c-com"># client_credentials — no human in the loop</span>
+has id_token?      False    <span class="c-com"># nobody to describe</span>
+has refresh_token? False    <span class="c-com"># just ask again</span>
+azp: backend-service    aud: playground-api</pre>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">Alice&rsquo;s 403 is the whole lesson in one line: <strong>authentication succeeded, authorization failed</strong>. Two different questions, two different answers.</div></div>
+
+<div class="foot"><span>intro to keycloak &middot; 09</span><span>zakaria.lu</span></div>

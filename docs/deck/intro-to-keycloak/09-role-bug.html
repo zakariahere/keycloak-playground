@@ -1,0 +1,49 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<body class="dark">
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>08</b><span>The bug everyone hits</span></div>
+<h1>Keycloak writes roles here. Spring <em>reads somewhere else.</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+  <div class="cols wide-left">
+    <div style="display:flex;flex-direction:column;gap:14px;min-height:0">
+<pre class="tight"><span class="c-com">// What Keycloak actually emits</span>
+{ <span class="c-key">"realm_access"</span>: { <span class="c-key">"roles"</span>: [<span class="c-str">"app-admin"</span>] } }
+
+<span class="c-com">// What Spring Security reads by default</span>
+{ <span class="c-key">"scope"</span>: <span class="c-str">"openid profile email"</span> }
+<span class="c-com">//   -&gt; SCOPE_openid, SCOPE_profile, SCOPE_email</span>
+<span class="mark">//   -&gt; zero ROLE_* authorities</span></pre>
+      <div class="card signal">
+        <span class="label">RESULT</span>
+        <p><code>hasRole("app-admin")</code> returns false for an obvious admin, and
+        <strong>nothing is logged anywhere</strong>.</p>
+      </div>
+    </div>
+    <div class="card">
+      <span class="label">WIRED TWICE, ON PURPOSE</span>
+      <table>
+        <thead><tr><th>Path</th><th>Hook</th></tr></thead>
+        <tbody>
+          <tr><td>API</td><td><code>JwtAuthenticationConverter</code><br><span class="dim">reads the access token</span></td></tr>
+          <tr><td>Login</td><td><code>GrantedAuthoritiesMapper</code><br><span class="dim">reads the ID token</span></td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:17px">And a Keycloak-side half: roles live in the <em>access</em>
+      token, but <code>oauth2Login</code> only reads the <em>ID</em> token. A protocol
+      mapper closes that gap.</p>
+    </div>
+  </div>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">Claim missing &rarr; check Keycloak&rsquo;s mappers. Claim present but rejected &rarr; check Spring&rsquo;s converters.</div></div>
+
+<div class="foot"><span>intro to keycloak &middot; 08</span><span>zakaria.lu</span></div>

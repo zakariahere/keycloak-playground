@@ -1,0 +1,5 @@
+Both of these came from one login as alice. Same signature, same key.
+
+The difference is aud. The ID token is addressed to spring-web, the app. The access token is addressed to playground-api, the API. Sending the ID token to the API fails audience validation, which is correct behaviour, not a bug.
+
+typ is the other tell: ID versus Bearer. A careful API can reject an ID token outright.

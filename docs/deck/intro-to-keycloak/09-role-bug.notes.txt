@@ -1,0 +1,7 @@
+The single most common Keycloak-with-Spring bug, and it fails silently.
+
+Keycloak writes realm_access.roles. Spring Security reads the flat scope claim. Nothing connects them, so hasRole returns false for an obvious admin and nothing is logged.
+
+It has to be wired twice because the two filter chains build Authentication differently. And there is a Keycloak-side half: roles go in the access token, but oauth2Login only reads the ID token, so a protocol mapper has to copy them across.
+
+Demo if there is time: comment out the mapper bean, log in as bob, hit /admin, get a silent 403.

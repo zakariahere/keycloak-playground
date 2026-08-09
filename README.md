@@ -93,6 +93,14 @@ docker compose down -v && ./mvnw spring-boot:run
 silently skipped** — the strategy is `IGNORE_EXISTING`, so it never overwrites an
 existing realm. That's the #1 reason "my realm edits didn't apply".
 
+## Talks
+
+[`docs/deck/`](docs/deck/) holds slide sources for talks generated out of this
+repo &mdash; HTML per slide plus speaker notes, rendered to a real `.pptx` by the
+`/ppt` pipeline. First one is
+[`intro-to-keycloak`](docs/deck/intro-to-keycloak/) (12 slides): what a token is,
+what it costs, and where every auth failure comes from.
+
 ## Branch layout
 
 `main` holds the working baseline. Each concept we dig into gets its own branch,

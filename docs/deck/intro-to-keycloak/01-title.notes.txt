@@ -1,0 +1,1 @@
+Framing: this is not a Keycloak feature tour. It is the mental model, built from a lab that actually runs. Every status code in this deck came out of a real curl against the running stack.

@@ -1,0 +1,7 @@
+Two things to take away.
+
+401 before identity, 403 after. That locates almost every auth bug.
+
+Claim missing, check Keycloak's mappers. Claim rejected, check Spring's converters. Java decides what to enforce; Keycloak decides what is in the token.
+
+Repo is public, one command to run, seeded users included.

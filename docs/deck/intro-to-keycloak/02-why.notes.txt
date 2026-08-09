@@ -1,0 +1,5 @@
+The usual explanation of OAuth starts with the redirect dance, which is backwards. Start here: what is the app holding afterwards?
+
+If the app takes the password, it holds a credential that works everywhere, forever, for everything, and cannot be narrowed. If it runs the code flow, it holds something scoped and expiring.
+
+That is the entire justification for all the machinery that follows.

@@ -1,0 +1,5 @@
+This is the conflation that writes real bugs: "logged in" and "holds a valid token" are separate states on separate clocks.
+
+In the lab you can prove it in five minutes. Log in, wait for the access token to expire, then hit /profile (works, it only reads the session) and /playground/call (401, it actually uses the token).
+
+Production code hides this because OAuth2AuthorizedClientManager refreshes silently. The lab reads the stored token directly so you can see it.

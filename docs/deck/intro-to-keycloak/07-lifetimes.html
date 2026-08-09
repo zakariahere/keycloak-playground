@@ -1,0 +1,52 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<style>
+  .dg { display:block; width:100%; height:auto; }
+  .dg text { font-family: var(--body); }
+  .dg .bx { fill: var(--paper-3); stroke: var(--rule-strong); stroke-width:1; }
+  .dg .bar { fill: var(--paper-2); stroke: var(--rule-strong); stroke-width:1; }
+  .dg .sigbar { fill: var(--paper-3); stroke: var(--signal); stroke-width:2; }
+  .dg .tt { font-size:22px; font-weight:600; fill: var(--ink); }
+  .dg .td { font-size:18px; fill: var(--ink-soft); }
+  .dg .tk { font-family: var(--mono); font-size:12.5px; letter-spacing:.16em; fill: var(--ink-mute); }
+  .dg .tm { font-family: var(--mono); font-size:16px; fill: var(--ink-soft); }
+  .dg .sg { fill: var(--signal); }
+  .dg .mk { stroke: var(--signal); stroke-width:1.5; stroke-dasharray:6 4; }
+</style>
+<body>
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>06</b><span>The conflation that writes bugs</span></div>
+<h1>&ldquo;Logged in&rdquo; and &ldquo;has a valid token&rdquo; <em>are different states</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+<svg class="dg" viewBox="0 0 1150 330" xmlns="http://www.w3.org/2000/svg">
+  <rect class="bx" x="0" y="14" width="250" height="72" rx="3"/>
+  <text class="tt" x="24" y="57">Access token</text>
+  <rect class="sigbar" x="285" y="28" width="130" height="44" rx="3"/>
+  <text class="tm sg" x="303" y="56">5 min</text>
+
+  <rect class="bx" x="0" y="118" width="250" height="72" rx="3"/>
+  <text class="tt" x="24" y="161">Session cookie</text>
+  <rect class="bar" x="285" y="132" width="780" height="44" rx="3"/>
+  <!-- Label sits right of the 5-minute marker so the dashed line never
+       crosses it. -->
+  <text class="tm" x="440" y="160">30 minutes idle</text>
+
+  <line class="mk" x1="415" y1="4" x2="415" y2="200"/>
+
+  <rect class="bx" x="285" y="226" width="780" height="82" rx="3"/>
+  <text class="tk sg" x="309" y="256">AT THE FIVE MINUTE MARK</text>
+  <text class="td" x="309" y="286">/profile still works. /playground/call returns 401.</text>
+</svg>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">Your login lives in a session cookie. The token lives in a server-side store. <strong>Neither one knows the other exists.</strong></div></div>
+
+<div class="foot"><span>intro to keycloak &middot; 06</span><span>zakaria.lu</span></div>

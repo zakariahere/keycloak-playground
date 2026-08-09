@@ -1,0 +1,5 @@
+Walk the address bar live if you can. Steps 1 to 4 are visible; step 5 is not.
+
+The key point: the browser only ever carries a single-use code. Tokens are exchanged over a direct server-to-server call. Even if someone captures the code from the URL, it is useless without the client secret and the PKCE verifier.
+
+PKCE exists because public clients (SPAs, mobile) cannot keep a secret at all.

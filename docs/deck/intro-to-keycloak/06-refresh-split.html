@@ -1,0 +1,63 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<style>
+  .dg { display:block; width:100%; height:auto; }
+  .dg text { font-family: var(--body); }
+  .dg .bx { fill: var(--paper-3); stroke: var(--rule-strong); stroke-width:1; }
+  .dg .sigbx { fill: var(--paper-3); stroke: var(--signal); stroke-width:2; }
+  .dg .tt { font-size:21px; font-weight:600; fill: var(--ink); }
+  .dg .td { font-size:17px; fill: var(--ink-soft); }
+  .dg .tk { font-family: var(--mono); font-size:12px; letter-spacing:.15em; fill: var(--ink-mute); }
+  .dg .sg { fill: var(--signal); }
+  .dg .ln { stroke: var(--rule-strong); stroke-width:1; fill:none; }
+</style>
+<body>
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>05</b><span>Why there are two tokens, not one</span></div>
+<h1>The one you use constantly <em>cannot be revoked</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+<svg class="dg" viewBox="0 0 1150 322" xmlns="http://www.w3.org/2000/svg">
+  <rect class="bx" x="395" y="0" width="360" height="70" rx="3"/>
+  <text class="tt" x="417" y="32">Your app</text>
+  <text class="td" x="417" y="56">Holds both tokens</text>
+
+  <path class="ln" d="M520 70 L300 106"/>
+  <path class="ln" d="M630 70 L850 106"/>
+
+  <rect class="sigbx" x="0" y="112" width="555" height="68" rx="3"/>
+  <text class="tt sg" x="22" y="144">Access token &rarr; your API</text>
+  <text class="td" x="22" y="168">On every single request</text>
+
+  <rect class="bx" x="0" y="192" width="555" height="56" rx="3"/>
+  <text class="tk" x="22" y="214">CHECKED HOW</text>
+  <text class="td" x="22" y="236">Offline, against a cached public key</text>
+
+  <rect class="bx" x="0" y="254" width="555" height="56" rx="3"/>
+  <text class="tk" x="22" y="276">CAN IT BE REVOKED</text>
+  <text class="td" x="22" y="298">No. Nobody ever phones home.</text>
+
+  <rect class="bx" x="595" y="112" width="555" height="68" rx="3"/>
+  <text class="tt" x="617" y="144">Refresh token &rarr; Keycloak</text>
+  <text class="td" x="617" y="168">Only when the old one dies</text>
+
+  <rect class="bx" x="595" y="192" width="555" height="56" rx="3"/>
+  <text class="tk" x="617" y="214">CHECKED HOW</text>
+  <text class="td" x="617" y="236">Live, against the database</text>
+
+  <rect class="bx" x="595" y="254" width="555" height="56" rx="3"/>
+  <text class="tk" x="617" y="276">CAN IT BE REVOKED</text>
+  <text class="td" x="617" y="298">Yes, instantly</text>
+</svg>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">Expiry is not the security &mdash; it is the <strong>checkpoint schedule</strong>. Shortening token lifetime just means asking more often, and you pay in traffic.</div></div>
+
+<div class="foot"><span>intro to keycloak &middot; 05</span><span>zakaria.lu</span></div>

@@ -1,0 +1,50 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<body class="dark">
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>04</b><span>Real payloads, one login as alice</span></div>
+<h1>Same signature, same login &mdash; <em>different addressee</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+  <div class="cols">
+    <div>
+      <div class="card" style="gap:12px">
+        <span class="label">ID TOKEN &middot; PROOF OF AUTHENTICATION</span>
+<pre class="tight">{
+  <span class="c-key">"iss"</span>: <span class="c-str">"http://localhost:8180/realms/playground"</span>,
+  <span class="c-key">"aud"</span>: <span class="c-hit">"spring-web"</span>,
+  <span class="c-key">"typ"</span>: <span class="c-hit">"ID"</span>,
+  <span class="c-key">"preferred_username"</span>: <span class="c-str">"alice"</span>,
+  <span class="c-key">"realm_access"</span>: { <span class="c-key">"roles"</span>: [<span class="c-str">"app-user"</span>] },
+  <span class="c-key">"exp"</span>: 1785946040
+}</pre>
+        <p style="font-size:17px">For <em>your app</em>. Who logged in.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="gap:12px">
+        <span class="label">ACCESS TOKEN &middot; PROOF OF AUTHORIZATION</span>
+<pre class="tight">{
+  <span class="c-key">"iss"</span>: <span class="c-str">"http://localhost:8180/realms/playground"</span>,
+  <span class="c-key">"aud"</span>: <span class="c-hit">"playground-api"</span>,
+  <span class="c-key">"typ"</span>: <span class="c-hit">"Bearer"</span>,
+  <span class="c-key">"azp"</span>: <span class="c-str">"spring-web"</span>,
+  <span class="c-key">"scope"</span>: <span class="c-str">"openid profile email"</span>,
+  <span class="c-key">"exp"</span>: 1785946040
+}</pre>
+        <p style="font-size:17px">For <em>an API</em>. What the bearer may do.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">The <code>aud</code> claim is the whole difference. Send the ID token to the API and it is rejected &mdash; <strong>correctly</strong>.</div></div>
+
+<div class="foot"><span>intro to keycloak &middot; 04</span><span>zakaria.lu</span></div>

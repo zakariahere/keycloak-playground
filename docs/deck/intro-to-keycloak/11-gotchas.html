@@ -1,0 +1,33 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<style>
+  /* ul.list li is display:flex, so every inline <code> would become its own
+     flex item with a 14px gap. One <span> child keeps the text flowing. */
+  ul.list li > span { display: block; }
+</style>
+<body>
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>10</b><span>Cost me time so it doesn't cost you any</span></div>
+<h1>Six things that bit us <em>building this lab</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+  <ul class="list">
+    <li><span><code>docker compose down</code> without <code>-v</code> does <strong>not</strong> re-import the realm. The strategy is <code>IGNORE_EXISTING</code>, so edits to the JSON are silently skipped.</span></li>
+    <li><span><code>postgres:18+</code> wants the volume at <code>/var/lib/postgresql</code>, not <code>/data</code>. The old path makes the image refuse to boot.</span></li>
+    <li><span>The Keycloak image ships no <code>curl</code> and no <code>wget</code>. Healthchecks have to use bash <code>/dev/tcp</code>.</span></li>
+    <li><span>Spring Boot 4 moved <code>RestClient.Builder</code> out of the web starter into <code>spring-boot-starter-restclient</code>.</span></li>
+    <li><span>Initializr's legacy metadata reports <code>4.1.0.RELEASE</code>; the real Maven artifact is <code>4.1.0</code>.</span></li>
+    <li><span><code>issuer-uri</code> is fetched <strong>eagerly at startup</strong> &mdash; the app will not boot with Keycloak down. Tests must spell the endpoints out instead.</span></li>
+  </ul>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">Five of these six fail with a message that points somewhere other than the cause. That is the real tax on this stack.</div></div>
+
+<div class="foot"><span>intro to keycloak &middot; 10</span><span>zakaria.lu</span></div>

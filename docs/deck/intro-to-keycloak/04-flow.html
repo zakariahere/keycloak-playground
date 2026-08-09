@@ -1,0 +1,61 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<style>
+  .dg { display:block; width:100%; height:auto; }
+  .dg text { font-family: var(--body); }
+  .dg .bx { fill: var(--paper-3); stroke: var(--rule-strong); stroke-width:1; }
+  .dg .sigbx { fill: var(--paper-3); stroke: var(--signal); stroke-width:2; }
+  .dg .tt { font-size:21px; font-weight:600; fill: var(--ink); }
+  .dg .td { font-size:17px; fill: var(--ink-soft); }
+  .dg .tk { font-family: var(--mono); font-size:12px; letter-spacing:.15em; fill: var(--ink-mute); }
+  .dg .sg { fill: var(--signal); }
+</style>
+<body>
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>03</b><span>Authorization Code flow + PKCE</span></div>
+<h1>Four redirects you can see, <em>one call you cannot</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+<svg class="dg" viewBox="0 0 1150 300" xmlns="http://www.w3.org/2000/svg">
+  <rect class="bx" x="0" y="0" width="360" height="132" rx="3"/>
+  <text class="tk" x="22" y="30">01 &middot; FRONT CHANNEL</text>
+  <text class="tt" x="22" y="66">Browser hits the trigger</text>
+  <text class="td" x="22" y="94">Spring builds the request</text>
+
+  <rect class="bx" x="395" y="0" width="360" height="132" rx="3"/>
+  <text class="tk" x="417" y="30">02 &middot; FRONT CHANNEL</text>
+  <text class="tt" x="417" y="66">Redirect to Keycloak</text>
+  <text class="td" x="417" y="94">Carries state, nonce, PKCE</text>
+
+  <rect class="bx" x="790" y="0" width="360" height="132" rx="3"/>
+  <text class="tk" x="812" y="30">03 &middot; FRONT CHANNEL</text>
+  <text class="tt" x="812" y="66">User types the password</text>
+  <text class="td" x="812" y="94">Your app never sees it</text>
+
+  <rect class="bx" x="0" y="158" width="360" height="132" rx="3"/>
+  <text class="tk" x="22" y="188">04 &middot; FRONT CHANNEL</text>
+  <text class="tt" x="22" y="224">Redirect back with a code</text>
+  <text class="td" x="22" y="252">Worthless if stolen alone</text>
+
+  <rect class="sigbx" x="395" y="158" width="360" height="132" rx="3"/>
+  <text class="tk sg" x="417" y="188">05 &middot; BACK CHANNEL</text>
+  <text class="tt sg" x="417" y="224">App swaps code for tokens</text>
+  <text class="td" x="417" y="252">Client secret + PKCE verifier</text>
+
+  <rect class="bx" x="790" y="158" width="360" height="132" rx="3"/>
+  <text class="tk" x="812" y="188">06 &middot; RESULT</text>
+  <text class="tt" x="812" y="224">Session established</text>
+  <text class="td" x="812" y="252">Browser gets a cookie</text>
+</svg>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">Tokens never travel through the browser. It only ever carries a <strong>single-use code</strong>, which is useless without the secret the server holds.</div></div>
+
+<div class="foot"><span>intro to keycloak &middot; 03</span><span>zakaria.lu</span></div>

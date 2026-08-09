@@ -1,0 +1,5 @@
+A realm is a hard boundary: own users, own clients, own signing keys. Nothing crosses.
+
+The one to flag is protocol mappers. Everyone finds clients/users/roles on day one. Mappers are what decide whether a claim exists in the token at all, and that is where half the "why doesn't this work" time goes.
+
+Never put application users in the master realm. It exists to administer Keycloak itself.

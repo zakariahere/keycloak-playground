@@ -1,0 +1,5 @@
+These are real, all hit while building this lab in one sitting.
+
+The first is the nastiest: docker compose down without -v leaves the volume, and the import strategy is IGNORE_EXISTING, so your realm JSON edits are silently ignored. You will swear the file is wrong.
+
+The theme: almost all of these fail with an error that points somewhere other than the cause.

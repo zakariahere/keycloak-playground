@@ -1,0 +1,65 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<style>
+  .dg { display:block; width:100%; height:auto; }
+  .dg text { font-family: var(--body); }
+  .dg .bx { fill: var(--paper-3); stroke: var(--rule-strong); stroke-width:1; }
+  .dg .sigbx { fill: var(--paper-3); stroke: var(--signal); stroke-width:2; }
+  .dg .tt { font-size:22px; font-weight:600; fill: var(--ink); }
+  .dg .td { font-size:18px; fill: var(--ink-soft); }
+  .dg .tk { font-family: var(--mono); font-size:12.5px; letter-spacing:.16em; fill: var(--ink-mute); }
+  .dg .sg { fill: var(--signal); }
+</style>
+<body>
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>01</b><span>Why any of this exists</span></div>
+<h1>Not &ldquo;don&rsquo;t type passwords&rdquo; &mdash; <em>what the app is left holding</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+<svg class="dg" viewBox="0 0 1150 300" xmlns="http://www.w3.org/2000/svg">
+  <text class="tk sg" x="0" y="14">IF YOUR APP TOOK THE PASSWORD</text>
+  <rect class="sigbx" x="0" y="28" width="555" height="68" rx="3"/>
+  <text class="tt sg" x="22" y="60">alice&rsquo;s password</text>
+  <text class="td" x="22" y="84">A master key</text>
+
+  <rect class="bx" x="0" y="108" width="555" height="56" rx="3"/>
+  <text class="tk" x="22" y="130">HOW MUCH POWER</text>
+  <text class="td" x="22" y="152">Everything alice can do</text>
+
+  <rect class="bx" x="0" y="170" width="555" height="56" rx="3"/>
+  <text class="tk" x="22" y="192">HOW LONG</text>
+  <text class="td" x="22" y="214">Until she changes it</text>
+
+  <rect class="bx" x="0" y="232" width="555" height="56" rx="3"/>
+  <text class="tk" x="22" y="254">WHERE IT WORKS</text>
+  <text class="td" x="22" y="276">Every app that asks</text>
+
+  <text class="tk" x="595" y="14">WHAT THE CODE FLOW HANDS OVER</text>
+  <rect class="bx" x="595" y="28" width="555" height="68" rx="3"/>
+  <text class="tt" x="617" y="60">An access token</text>
+  <text class="td" x="617" y="84">A valet key</text>
+
+  <rect class="bx" x="595" y="108" width="555" height="56" rx="3"/>
+  <text class="tk" x="617" y="130">SCOPE CLAIM</text>
+  <text class="td" x="617" y="152">openid profile email</text>
+
+  <rect class="bx" x="595" y="170" width="555" height="56" rx="3"/>
+  <text class="tk" x="617" y="192">EXP CLAIM</text>
+  <text class="td" x="617" y="214">300 seconds</text>
+
+  <rect class="bx" x="595" y="232" width="555" height="56" rx="3"/>
+  <text class="tk" x="617" y="254">AUD CLAIM</text>
+  <text class="td" x="617" y="276">playground-api, and nothing else</text>
+</svg>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">Breach the left-hand app and you lose alice&rsquo;s password &mdash; which she reuses. Breach the right-hand one and you lose <strong>five minutes of access to one API</strong>.</div></div>
+
+<div class="foot"><span>intro to keycloak &middot; 01</span><span>zakaria.lu</span></div>

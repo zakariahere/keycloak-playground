@@ -1,0 +1,5 @@
+If you memorise one slide, this one. Every auth failure is "which stage did it exit at".
+
+Left of the dashed line, the app does not know who you are: 401. Right of it, identity exists and the question is permission: 403.
+
+The WWW-Authenticate header names the stage. invalid_token means stage 2. insufficient_scope means stage 4. Read the header before you start guessing.

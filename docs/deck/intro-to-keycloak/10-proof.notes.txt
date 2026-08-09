@@ -1,0 +1,5 @@
+Real output from the running lab, not a diagram.
+
+The line to point at is alice on /api/admin/report. Her token is completely valid: good signature, right issuer, right audience, not expired. She still gets 403, because she lacks the role. Authentication succeeded, authorization failed.
+
+The client_credentials block is worth ten seconds: no id_token because there is no user to describe, and no refresh_token because the service can just ask again.

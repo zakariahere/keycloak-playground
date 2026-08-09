@@ -1,0 +1,59 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<style>
+  .dg { display:block; width:100%; height:auto; }
+  .dg text { font-family: var(--body); }
+  .dg .bx { fill: var(--paper-3); stroke: var(--rule-strong); stroke-width:1; }
+  .dg .tt { font-size:22px; font-weight:600; fill: var(--ink); }
+  .dg .td { font-size:18px; fill: var(--ink-soft); }
+  .dg .tm { font-family: var(--mono); font-size:15px; fill: var(--ink-mute); }
+  .dg .tk { font-family: var(--mono); font-size:12.5px; letter-spacing:.16em; fill: var(--signal); }
+  .dg .realm { fill:none; stroke: var(--signal); stroke-width:1.5; stroke-dasharray:7 5; }
+</style>
+<body>
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>02</b><span>The nouns</span></div>
+<h1>Five things live in a realm &mdash; <em>and nothing crosses the line</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+<svg class="dg" viewBox="0 0 1150 300" xmlns="http://www.w3.org/2000/svg">
+  <rect class="realm" x="1" y="1" width="1148" height="288" rx="4"/>
+  <text class="tk" x="24" y="32">REALM: PLAYGROUND</text>
+
+  <rect class="bx" x="24" y="52" width="350" height="100" rx="3"/>
+  <text class="tt" x="46" y="90">Clients</text>
+  <text class="td" x="46" y="116">Applications, not people</text>
+  <text class="tm" x="46" y="140">spring-web &middot; backend-service</text>
+
+  <rect class="bx" x="400" y="52" width="350" height="100" rx="3"/>
+  <text class="tt" x="422" y="90">Users</text>
+  <text class="td" x="422" y="116">The humans</text>
+  <text class="tm" x="422" y="140">alice &middot; bob</text>
+
+  <rect class="bx" x="776" y="52" width="350" height="100" rx="3"/>
+  <text class="tt" x="798" y="90">Roles</text>
+  <text class="td" x="798" y="116">Labels on users</text>
+  <text class="tm" x="798" y="140">app-user &middot; app-admin</text>
+
+  <rect class="bx" x="24" y="166" width="537" height="100" rx="3"/>
+  <text class="tt" x="46" y="204">Client scopes</text>
+  <text class="td" x="46" y="230">What the user consented to let a client do</text>
+  <text class="tm" x="46" y="254">openid &middot; profile &middot; email</text>
+
+  <rect class="bx" x="589" y="166" width="537" height="100" rx="3"/>
+  <text class="tt" x="611" y="204">Protocol mappers</text>
+  <text class="td" x="611" y="230">Decide what actually lands in the token</text>
+  <text class="tm" x="611" y="254">audience &middot; realm-roles-into-id-token</text>
+</svg>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">A realm is a sealed universe with its own users, clients <strong>and signing keys</strong>. <code>master</code> administers Keycloak itself &mdash; never put application users there.</div></div>
+
+<div class="foot"><span>intro to keycloak &middot; 02</span><span>zakaria.lu</span></div>

@@ -1,0 +1,5 @@
+This is the trade nobody explains. The API validates offline against a cached public key, which is what makes it fast. The cost is that it cannot know a user was disabled thirty seconds ago.
+
+So the credential is split. The one used constantly cannot be revoked, therefore it dies fast. The one that can be revoked is used rarely, in exactly one place.
+
+Expiry is not the security. It is the checkpoint schedule. The check at the checkpoint is the security.
