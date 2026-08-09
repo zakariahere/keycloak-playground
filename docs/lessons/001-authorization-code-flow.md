@@ -30,10 +30,10 @@ http://localhost:8180/realms/playground/protocol/openid-connect/auth
   ?response_type=code
   &client_id=spring-web
   &scope=openid profile email
-  &state=VXCxXoHXN2dA5-LQD3_PoQ2a9tLNED3fvzEEyw8dU-o=
+  &state=Ca1CyemojepvmjkZpldnbyVoQhecHcuU0taQQFOhJJI=
   &redirect_uri=http://localhost:8090/login/oauth2/code/keycloak
-  &nonce=T_VydioD_wmr89trlCvW9yDkemWOhLIpL_LxZRZMgfE
-  &code_challenge=9Rml50xOcbVH_VZZi8rImZRIMLisxjnp42u6fzpPpBo
+  &nonce=FjT8VLCv2YbJ537FN_RzC1Qb_X25Ll2OtyQn08vRgG0
+  &code_challenge=83H_-FF6O2zoOBjuqLWUO4O-P97Rz25_YcE_Dn-dixQ
   &code_challenge_method=S256
 ```
 
@@ -76,10 +76,10 @@ The resolver generated a 128-character `code_verifier` and kept it. Only its
 hash went into the URL. Verified directly:
 
 ```
-verifier   n7u3mVARlOEt0-ssSG8XBaKezQnqN2dE4Tya…  (128 chars; RFC 7636 allows 43–128)
+verifier   665T4Ozw1ikVfX9bPPbyDYAO4--ipP1j3qNTiyZq-jqw…  (128 chars; RFC 7636 allows 43–128)
 sha256 → base64url, '=' stripped
-computed   9Rml50xOcbVH_VZZi8rImZRIMLisxjnp42u6fzpPpBo
-in the URL 9Rml50xOcbVH_VZZi8rImZRIMLisxjnp42u6fzpPpBo   ← match
+computed   83H_-FF6O2zoOBjuqLWUO4O-P97Rz25_YcE_Dn-dixQ
+in the URL 83H_-FF6O2zoOBjuqLWUO4O-P97Rz25_YcE_Dn-dixQ   ← match
 ```
 
 So: steal the entire URL, steal the code out of the redirect, and you still
