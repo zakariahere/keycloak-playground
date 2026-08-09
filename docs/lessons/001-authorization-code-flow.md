@@ -88,6 +88,32 @@ matches the challenge, and that value was never transmitted. PKCE binds the code
 to the client that requested it **without any shared secret** — which is why it
 works for public clients that cannot hold one.
 
+## Finding: the nonce is hashed too
+
+The `/flow` page also dumps what the resolver kept in memory, and the stored
+nonce does **not** match the one in the URL:
+
+```
+nonce stored in session   ZT6ROnnp9DvHl2u5fAUEHhTs5mSNm1zu6nuRCW5sn4yY0SQEHTJPxCTFTuC9s41q…
+nonce sent in the URL     FjT8VLCv2YbJ537FN_RzC1Qb_X25Ll2OtyQn08vRgG0
+
+stored == sent            false
+sha256(stored) == sent    true
+```
+
+Spring keeps the raw nonce and sends its SHA-256 — exactly the pattern it uses
+for PKCE, applied to a different parameter. Keycloak copies the *hashed* value
+into the ID token, and on the way back Spring re-hashes its stored raw nonce and
+compares.
+
+Why bother: the ID token is comparatively exposed (it is handled, logged,
+sometimes forwarded). Whoever sees one learns the hash but never the raw value,
+so they cannot construct a fresh authorization request that would validate
+against it.
+
+**Send a hash, keep the thing that made it, prove ownership later.** Once you
+see that shape you will notice it everywhere in OAuth.
+
 ## The two channels
 
 | | Front channel | Back channel |
