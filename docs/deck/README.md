@@ -56,9 +56,15 @@ rather than a bad path.
 - **Overflow is silent.** The canvas is a hard 1280&times;720; anything past it
   is clipped and the render still exits 0. Always render with `-PngOnly` and
   actually look at the output before building.
-- **`ul.list li` is `display:flex`.** Inline `<code>` inside a bullet becomes its
-  own flex item with a gap, which shreds the line. Wrap the bullet content in a
-  single `<span>` — see `intro-to-keycloak/11-gotchas.html`.
+- **`ul.list li` AND `ol.steps li` are both `display:flex`.** Any inline
+  `<code>`/`<strong>` inside a bullet becomes its own flex item with a gap, which
+  shreds the line into staggered columns. Wrap the bullet content in a single
+  `<span>` and add `li > span { display: block; }`. Bit us once per deck — see
+  `intro-to-keycloak/11-gotchas.html` and
+  `authorization-code-flow/08-callback.html`.
+- **`.cols` has `flex:1`, so cards stretch and overflow silently.** If a slide has
+  a `.cols` row *plus* anything below it, give the row `style="flex:0 0 auto"` and
+  cut text until it fits. This is the failure the render will not tell you about.
 - **Fonts load from Google Fonts over the network.** The build already passes a
   6 s virtual-time budget; shorten it and the whole deck renders in Times New Roman.
 - **One idea in signal red per slide.** Two red things means neither reads as
@@ -69,3 +75,4 @@ rather than a bad path.
 | Deck | Slides | About |
 | ---- | ------ | ----- |
 | [`intro-to-keycloak`](intro-to-keycloak/) | 12 | What a token is, what it costs, and where every auth failure comes from. Diagrams are inline SVG driven off the brand tokens; slide 10 is real captured output from the running lab. |
+| [`authorization-code-flow`](authorization-code-flow/) | 11 | Lesson 001. The real authorization request parameter by parameter, the three bindings (state / nonce / code_challenge), and the PKCE + nonce hashes verified against the capture. |

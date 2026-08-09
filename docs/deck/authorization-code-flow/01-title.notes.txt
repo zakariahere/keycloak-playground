@@ -1,0 +1,1 @@
+Lesson 001 on the keycloak-playground repo. Everything in this deck was captured from a running lab -- the URLs, the hashes, the status codes. Nothing is illustrative.

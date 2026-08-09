@@ -1,0 +1,3 @@
+Read the parameters out loud. Then make the point: all of this is in the address bar, in history, in every proxy. None of it is secret and none of it is enough.
+
+response_type=code is the word that names the flow. The implicit flow put the token straight in the URL fragment, which is exactly why it is deprecated.

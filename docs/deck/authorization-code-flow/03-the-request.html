@@ -1,0 +1,32 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<body class="dark">
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>02</b><span>Captured from /flow, not reconstructed</span></div>
+<h1>Every parameter is public. <em>None of it is enough.</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+<pre class="tight">GET http://localhost:8180/realms/playground/protocol/openid-connect/auth
+
+  <span class="c-hit">response_type</span>          code                 <span class="c-com"># a CODE, not a token</span>
+  client_id              spring-web
+  scope                  openid profile email
+  state                  Ca1CyemojepvmjkZpldnbyVoQhecHcuU0taQQFOhJJI=
+  redirect_uri           http://localhost:8090/login/oauth2/code/keycloak
+  nonce                  FjT8VLCv2YbJ537FN_RzC1Qb_X25Ll2OtyQn08vRgG0
+  code_challenge         83H_-FF6O2zoOBjuqLWUO4O-P97Rz25_YcE_Dn-dixQ
+  code_challenge_method  S256
+
+<span class="c-com"># address bar, browser history, every proxy in between</span></pre>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt"><code>response_type=code</code> is the single word that names the flow. Ask for a token here instead and you get the implicit flow, which is deprecated for exactly this reason.</div></div>
+
+<div class="foot"><span>authorization code flow &middot; 02</span><span>zakaria.lu</span></div>

@@ -1,0 +1,5 @@
+Real values from one render, hashes recomputed to check.
+
+The nonce half is the part nobody mentions. Spring stores the raw nonce and puts sha256 of it in the URL; Keycloak copies the hashed value into the ID token; Spring re-hashes and compares on the way back.
+
+The reason: ID tokens get logged and forwarded. Seeing one gives you the hash, never the raw value, so you cannot construct a request that validates against it.

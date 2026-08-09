@@ -1,0 +1,36 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<body class="dark">
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>05</b><span>Verified, not assumed</span></div>
+<h1>The same trick, <em>applied twice</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+<pre class="tight"><span class="c-com"># PKCE</span>
+code_verifier    665T4Ozw1ikVfX9bPPbyDYAO4--ipP1j3qNTiyZq-jqw...  <span class="c-com">(128 chars, kept)</span>
+sha256 -&gt; b64url  83H_-FF6O2zoOBjuqLWUO4O-P97Rz25_YcE_Dn-dixQ
+in the URL       83H_-FF6O2zoOBjuqLWUO4O-P97Rz25_YcE_Dn-dixQ      <span class="c-hit">match</span>
+
+<span class="c-com"># nonce -- the one nobody mentions</span>
+stored           ZT6ROnnp9DvHl2u5fAUEHhTs5mSNm1zu6nuRCW5sn4yY...  <span class="c-com">(kept)</span>
+sha256 -&gt; b64url  FjT8VLCv2YbJ537FN_RzC1Qb_X25Ll2OtyQn08vRgG0
+in the URL       FjT8VLCv2YbJ537FN_RzC1Qb_X25Ll2OtyQn08vRgG0      <span class="c-hit">match</span></pre>
+
+  <div class="card" style="margin-top:20px">
+    <span class="label">WHY HASH THE NONCE AT ALL</span>
+    <p>Keycloak copies the hashed nonce into the ID token, and ID tokens get handled,
+    logged, sometimes forwarded. Whoever sees one learns the hash and never the raw
+    value, so they cannot forge a request that would validate against it.</p>
+  </div>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">Two parameters, one pattern: <strong>send a hash, keep the thing that made it, prove ownership later</strong>. Once you see the shape you find it everywhere in OAuth.</div></div>
+
+<div class="foot"><span>authorization code flow &middot; 05</span><span>zakaria.lu</span></div>

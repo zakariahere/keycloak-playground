@@ -1,0 +1,1 @@
+Frame the flow as a delivery problem, not a login problem. The app needs a token. The password must never reach it. The code is the courier: it can cross the browser because it is useless on its own.

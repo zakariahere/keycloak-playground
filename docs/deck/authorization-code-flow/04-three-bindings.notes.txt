@@ -1,0 +1,3 @@
+This is the slide that stops the three from blurring together. They all look like base64 noise and all round-trip, so people treat them as interchangeable.
+
+Bindings, not tokens. state: callback to session. nonce: ID token to request. code_challenge: code to client. Drop any one and the other two do not cover the gap.

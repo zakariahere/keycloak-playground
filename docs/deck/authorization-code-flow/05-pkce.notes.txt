@@ -1,0 +1,3 @@
+PKCE was designed for mobile apps, where another app could register the same custom URI scheme and intercept the redirect. It generalises: it binds the code to whoever requested it with no shared secret at all.
+
+That last part is why it works for public clients -- SPAs, mobile -- which cannot hold a secret by definition.

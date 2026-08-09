@@ -1,0 +1,44 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<body>
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>01</b><span>The problem</span></div>
+<h1>Your app needs a token. <em>It must never see the password.</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+  <div class="flow" style="justify-content:center">
+    <span class="node">alice</span>
+    <span class="arrow">&rarr;</span>
+    <span class="node">Keycloak</span>
+    <span class="arrow">&rarr;</span>
+    <span class="node sig">a single-use code</span>
+    <span class="arrow">&rarr;</span>
+    <span class="node">your app</span>
+    <span class="arrow">&rarr;</span>
+    <span class="node">token</span>
+  </div>
+
+  <div class="cols" style="margin-top:26px;flex:0 0 auto">
+    <div class="card">
+      <span class="label">WHO TAKES THE PASSWORD</span>
+      <p>Keycloak. Your app renders no login form and never receives a credential
+      it could store, log, or leak.</p>
+    </div>
+    <div class="card signal">
+      <span class="label">WHAT CROSSES THE BROWSER</span>
+      <p>A code. Short-lived, single-use, and worthless without two secrets that
+      never leave your server.</p>
+    </div>
+  </div>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">The whole flow exists to move a credential from Keycloak to your server <strong>without routing it through the browser</strong>.</div></div>
+
+<div class="foot"><span>authorization code flow &middot; 01</span><span>zakaria.lu</span></div>

@@ -1,0 +1,5 @@
+An honest "I was wrong about the default". I expected to have to enable PKCE for a confidential client because that is what the docs and every tutorial say.
+
+The reasoning arrived backwards: Keycloak requires a challenge on this client, and logins had been working for days. So Spring must have been sending one all along. Then /flow confirmed it.
+
+Moral: check the wire before copying a fix off the internet.

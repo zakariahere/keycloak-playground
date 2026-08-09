@@ -1,0 +1,38 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<body>
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>06</b><span>Spring Security 7.1</span></div>
+<h1>We never enabled PKCE. <em>It was on anyway.</em></h1>
+<div class="hr"></div>
+
+<div class="wrap">
+  <div class="cols wide-left">
+    <div class="card">
+      <span class="label">WHAT EVERY TUTORIAL TELLS YOU TO WRITE</span>
+<pre class="tight">resolver.setAuthorizationRequestCustomizer(
+    OAuth2AuthorizationRequestCustomizers.<span class="c-key">withPkce</span>());</pre>
+      <p>The opt-in customizer exists, and for years it was required for
+      confidential clients. We never called it.</p>
+      <p>The request still carried <code>code_challenge_method=S256</code>.</p>
+    </div>
+    <div class="card signal">
+      <span class="label">WHY IT MATTERED HERE</span>
+      <p>The <code>spring-web</code> client sets
+      <code>pkce.code.challenge.method: S256</code>, so Keycloak <strong>requires</strong>
+      a challenge.</p>
+      <p>Had Spring not sent one, every login since day one would have failed.
+      They didn't &mdash; which is the proof, arrived at backwards.</p>
+    </div>
+  </div>
+</div>
+
+<div class="verdict"><div class="bar"></div><div class="txt">Check the wire before you copy a fix. A tutorial telling you to add <code>withPkce()</code> for a confidential client is describing <strong>an older Spring Security</strong>.</div></div>
+
+<div class="foot"><span>authorization code flow &middot; 06</span><span>zakaria.lu</span></div>

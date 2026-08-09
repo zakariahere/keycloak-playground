@@ -1,0 +1,3 @@
+Walk it slowly. The single-use lookup in step 1 is the CSRF defence -- the saved request is removed, so a replay finds nothing.
+
+Step 4 is where the two server-side secrets are spent: the client secret and the PKCE verifier. Step 3 is the only leg the browser never sees, and it is the only leg carrying anything worth stealing.

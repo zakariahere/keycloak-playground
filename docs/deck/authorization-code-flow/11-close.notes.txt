@@ -1,0 +1,5 @@
+Two things.
+
+Three bindings, three attacks -- that is how to keep state, nonce and code_challenge straight forever.
+
+Send a hash, keep the thing that made it. It shows up twice in a single request here, and again later in introspection and client assertions.

@@ -1,0 +1,3 @@
+Worth showing live if there is a projector. Reload it two or three times so people see state, nonce and code_challenge change every single time.
+
+The method matters as much as the result: borrowing the framework's own resolver means you are looking at the real request. Hand-rolling the URL would only confirm your own assumptions.

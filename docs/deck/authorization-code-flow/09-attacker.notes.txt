@@ -1,0 +1,3 @@
+The payoff slide. Go row by row and let it accumulate: even total control of the browser yields nothing usable.
+
+The redirect_uri number is measured, not asserted -- 400 with "Invalid parameter: redirect_uri" before any login form, versus 302 for the untampered request. That whitelist is what stops an open redirector from becoming a token thief.

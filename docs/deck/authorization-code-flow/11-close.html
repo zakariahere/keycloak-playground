@@ -1,0 +1,23 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="slide-base.css">
+<body class="statement">
+
+<div class="tick h t1h"></div><div class="tick v t1v"></div>
+<div class="tick h t2h"></div><div class="tick v t2v"></div>
+<div class="tick h t3h"></div><div class="tick v t3v"></div>
+<div class="tick h t4h"></div><div class="tick v t4v"></div>
+
+<div class="kicker"><b>10</b><span>Take these away</span></div>
+
+<h1>The browser carries a code. <em>Never a credential.</em></h1>
+
+<div class="sub" style="max-width:64ch">
+  <strong>Three bindings, three attacks.</strong> state welds the callback to your
+  session, nonce welds the ID token to this request, code_challenge welds the code
+  to the client that asked.<br><br>
+  <strong>Send a hash, keep the thing that made it.</strong> Spring does it for the
+  PKCE verifier and, quietly, for the nonce as well.
+</div>
+
+<div class="foot"><span>github.com/zakariahere/keycloak-playground &middot; docs/lessons/001</span><span>zakaria.lu</span></div>
