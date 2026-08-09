@@ -104,17 +104,21 @@ what it costs, and where every auth failure comes from.
 ## Branch layout
 
 `main` holds the working baseline. Each concept we dig into gets its own branch,
-numbered in the order we covered it:
+numbered in the order we covered it, with a write-up under `docs/lessons/`:
 
 ```
-main                    the baseline playground
-├── 001_<concept>        one concept, one branch
+main                                  the baseline playground
+├── 001_authorization_code_flow       + /flow front-channel inspector
 ├── 002_<concept>
 └── ...
 ```
 
 Branches are cut from `main` and kept, not deleted — each one is a snapshot you
 can `git switch` back to when you want to re-read how that concept was wired.
+
+| Lesson | Branch | Adds |
+| ------ | ------ | ---- |
+| [001 — Authorization Code flow](docs/lessons/001-authorization-code-flow.md) | `001_authorization_code_flow` | `/flow`: renders the real authorization request instead of following it |
 
 ## Concept → code
 

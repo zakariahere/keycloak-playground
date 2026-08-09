@@ -77,7 +77,9 @@ public class SecurityConfig {
 	SecurityFilterChain webFilterChain(HttpSecurity http, ClientRegistrationRepository clients) throws Exception {
 		http
 			.authorizeHttpRequests((authorize) -> authorize
-				.requestMatchers("/", "/error", "/css/**", "/actuator/**").permitAll()
+				// /flow is anonymous on purpose: the whole point is to read the
+				// authorization request BEFORE you have logged in.
+				.requestMatchers("/", "/error", "/css/**", "/actuator/**", "/flow").permitAll()
 				.requestMatchers("/admin/**").hasRole("app-admin")
 				.anyRequest().authenticated())
 			// One line = the whole Authorization Code flow: the redirect to

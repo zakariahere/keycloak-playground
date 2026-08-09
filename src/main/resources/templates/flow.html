@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Front channel inspector</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+
+<main>
+  <h1>The front channel, frozen</h1>
+  <p class="lede">This is the exact URL your browser gets redirected to when you click
+    <strong>Log in</strong> &mdash; built by the same Spring component, just rendered instead of followed.</p>
+
+  <div th:if="${error}" class="card">
+    <p th:text="${error}">error</p>
+  </div>
+
+  <div class="card" th:unless="${error}">
+    <h2 style="margin-top:0">Where you would be sent</h2>
+    <pre class="wrap" style="white-space:pre-wrap" th:text="${uri}">https://...</pre>
+    <p class="note">Everything below is visible in the address bar, in server logs, and in browser
+      history. Nothing here is a secret &mdash; which is exactly why none of it is enough to get a token.</p>
+  </div>
+
+  <div class="card" th:unless="${error}">
+    <h2 style="margin-top:0">Every parameter, in wire order</h2>
+    <table>
+      <tr th:each="p : ${params}">
+        <th style="width:26%">
+          <span th:text="${p.name}">param</span>
+          <span th:if="${p.critical}" class="pill role" style="margin-left:6px">security</span>
+        </th>
+        <td>
+          <code class="inline wrap" th:text="${p.value}">value</code>
+          <div style="color:#6b645d;font-size:13px;margin-top:5px" th:text="${p.explanation}">what it does</div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card" th:unless="${error}">
+    <h2 style="margin-top:0">PKCE: the half that never leaves</h2>
+    <p th:if="${pkceApplied}">
+      A <code class="inline">code_verifier</code> was generated and kept server-side. Only its
+      SHA-256 hash went into the URL above as <code class="inline">code_challenge</code>.
+    </p>
+    <p th:unless="${pkceApplied}">
+      <strong>No code_verifier was generated</strong> &mdash; PKCE is not being applied to this request.
+    </p>
+    <table th:if="${pkceApplied}">
+      <tr><th>code_verifier (kept)</th><td class="wrap"><code class="inline" th:text="${codeVerifier}">...</code></td></tr>
+    </table>
+    <p class="note">Steal the whole URL above and you still cannot exchange the code: the token
+      request must present the verifier whose hash matches. That is the entire point of PKCE &mdash;
+      it binds the code to the client that asked for it, with no shared secret involved.</p>
+  </div>
+
+  <div class="card" th:unless="${error}">
+    <h2 style="margin-top:0">What Spring kept in memory</h2>
+    <p>In a real login these are saved in the session, then checked when the code comes back.</p>
+    <table>
+      <tr th:each="a : ${attributes}">
+        <th th:text="${a.key}">key</th>
+        <td class="wrap"><code class="inline" th:text="${a.value}">value</code></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Now do it for real</h2>
+    <p><a class="btn" th:href="@{/oauth2/authorization/keycloak}">Follow the redirect</a></p>
+    <p class="note">Reload this page first: <code class="inline">state</code>,
+      <code class="inline">nonce</code> and <code class="inline">code_challenge</code> are different
+      every single time. A value that repeated would be a replay waiting to happen.</p>
+  </div>
+</main>
+</body>
+</html>

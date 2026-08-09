@@ -7,6 +7,7 @@
   <nav>
     <span class="brand">Keycloak Playground</span>
     <a th:href="@{/}">Home</a>
+    <a th:href="@{/flow}">Flow</a>
     <a th:href="@{/profile}" sec:authorize="isAuthenticated()">Profile</a>
     <a th:href="@{/tokens}" sec:authorize="isAuthenticated()">Tokens</a>
     <a th:href="@{/admin}" sec:authorize="hasRole('app-admin')">Admin</a>
