@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+
+<main>
+  <h1>Admin area</h1>
+  <p class="lede">Gated by <code class="inline">.requestMatchers("/admin/**").hasRole("app-admin")</code>.</p>
+
+  <div class="card">
+    <p>You reached this page, so your ID token carried <code class="inline">app-admin</code> in
+      <code class="inline">realm_access.roles</code> and the authorities mapper turned it into
+      <code class="inline">ROLE_app-admin</code>.</p>
+    <div>
+      <span th:each="a : ${authorities}" class="pill" th:text="${a.authority}">ROLE_app-admin</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Experiment</h2>
+    <p>Open the Keycloak console, remove <code class="inline">app-admin</code> from bob, then reload this page.
+      You still get in &mdash; because your ID token was minted <em>before</em> the change and this app
+      trusts it until it expires.</p>
+    <p class="note">That lag is inherent to token-based auth, not a Keycloak bug. Shorten token lifetimes
+      to shrink the window, or introspect on every request and give up the offline-validation speed.</p>
+  </div>
+</main>
+</body>
+</html>

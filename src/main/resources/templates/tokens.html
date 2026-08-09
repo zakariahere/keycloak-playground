@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Token inspector</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+
+<main>
+  <h1>Token inspector</h1>
+  <p class="lede">Three tokens came back from Keycloak. They look alike and do completely different jobs.</p>
+
+  <div class="card">
+    <table>
+      <tr>
+        <th>ID token</th>
+        <td>Proof of <em>authentication</em>, addressed to this app. Answers &ldquo;who logged in?&rdquo;.
+          Expires in <strong th:text="${idTokenExpiresIn}">300</strong>s.
+          <strong>Never send it to an API.</strong></td>
+      </tr>
+      <tr>
+        <th>Access token</th>
+        <td>Proof of <em>authorization</em>, addressed to an API. Answers &ldquo;what may the bearer do?&rdquo;.
+          Expires in <strong th:text="${accessTokenExpiresIn}">300</strong>s. This is the one you put in
+          <code class="inline">Authorization: Bearer</code>.</td>
+      </tr>
+      <tr>
+        <th>Refresh token</th>
+        <td th:if="${hasRefreshToken}">Present (<code class="inline wrap" th:text="${refreshTokenPrefix}">ey...</code>).
+          Long-lived, stays server-side, buys new access tokens without re-prompting you.</td>
+        <td th:unless="${hasRefreshToken}">Not issued.</td>
+      </tr>
+    </table>
+    <p class="note">Short access-token lifetime is deliberate. A stolen access token is only useful for
+      about five minutes, because revocation cannot be enforced on a self-contained JWT &mdash; the API
+      validates it offline and never phones home.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2 style="margin-top:0">ID token &mdash; header</h2>
+      <pre th:text="${idToken.header}">{}</pre>
+      <h2>ID token &mdash; payload</h2>
+      <pre th:text="${idToken.payload}">{}</pre>
+    </div>
+    <div class="card">
+      <h2 style="margin-top:0">Access token &mdash; header</h2>
+      <pre th:text="${accessToken != null} ? ${accessToken.header} : '(none)'">{}</pre>
+      <h2>Access token &mdash; payload</h2>
+      <pre th:text="${accessToken != null} ? ${accessToken.payload} : '(none)'">{}</pre>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Spot the differences</h2>
+    <table>
+      <tr><th>aud</th><td>The ID token is addressed to <code class="inline">spring-web</code>.
+        The access token carries <code class="inline">playground-api</code>, added by an audience
+        protocol mapper. Our resource server rejects anything without it.</td></tr>
+      <tr><th>realm_access.roles</th><td>Keycloak puts roles in the access token by default.
+        They only appear in the ID token here because the realm adds an extra mapper for it.</td></tr>
+      <tr><th>typ</th><td><code class="inline">ID</code> vs <code class="inline">Bearer</code>. Keycloak
+        labels them so a careful API can refuse an ID token outright.</td></tr>
+      <tr><th>kid</th><td>Same in both: the same realm key signed them. Your app fetched the matching
+        public key from <code class="inline">/protocol/openid-connect/certs</code> and cached it.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Call the API with this token</h2>
+    <p>The server attaches the bearer header for you. The browser never sees the token.</p>
+    <p>
+      <a class="btn ghost" th:href="@{/playground/call(path='/api/public')}">GET /api/public</a>
+      <a class="btn ghost" th:href="@{/playground/call(path='/api/me')}">GET /api/me</a>
+      <a class="btn ghost" th:href="@{/playground/call(path='/api/admin/report')}">GET /api/admin/report</a>
+    </p>
+    <p class="note">Logged in as alice, the last one returns 403 &mdash; her token is valid, it simply
+      does not carry <code class="inline">app-admin</code>. Authentication succeeded; authorization failed.</p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Raw access token</h2>
+    <p><strong th:text="${accessToken != null} ? ${accessToken.length} : 0">0</strong> characters,
+      re-sent on every single API request.</p>
+    <pre class="wrap" style="white-space:pre-wrap" th:text="${accessTokenRaw}">ey...</pre>
+    <p class="note">Paste it into jwt.io if you like &mdash; it decodes with no key whatsoever.
+      That is not a flaw; a JWT is signed, not encrypted.</p>
+  </div>
+</main>
+</body>
+</html>

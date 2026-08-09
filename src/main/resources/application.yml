@@ -1,0 +1,76 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: keycloak-playground
+
+  docker:
+    compose:
+      # start_only = Keycloak keeps running when you stop the Spring app.
+      # Much nicer for learning: restarting the app doesn't kill your session.
+      # Stop it yourself with: docker compose down
+      lifecycle-management: start_only
+      skip:
+        in-tests: true
+
+  thymeleaf:
+    cache: false
+
+  security:
+    oauth2:
+
+      # -------------------------------------------------------------------
+      # ROLE 1: OAuth2 CLIENT.
+      # "I am an app that sends users to Keycloak to log in, then receives
+      #  tokens on their behalf."
+      # -------------------------------------------------------------------
+      client:
+        provider:
+          keycloak:
+            # This ONE line replaces authorization-uri, token-uri, jwk-set-uri,
+            # userinfo-uri and end-session-endpoint. On startup Spring fetches
+            # <issuer-uri>/.well-known/openid-configuration and reads them all.
+            # That document is the OIDC Discovery contract.
+            issuer-uri: http://localhost:8180/realms/playground
+            # Without this, principal.getName() would be the opaque `sub` UUID.
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: spring-web
+            client-secret: spring-web-secret
+            authorization-grant-type: authorization_code
+            scope: openid,profile,email
+            # {baseUrl} and {registrationId} are resolved at runtime. The
+            # resulting URI must be whitelisted in the Keycloak client.
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+      # -------------------------------------------------------------------
+      # ROLE 2: RESOURCE SERVER.
+      # "I am an API that accepts `Authorization: Bearer <jwt>` and validates
+      #  it myself, offline, using Keycloak's public keys."
+      # -------------------------------------------------------------------
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/playground
+          # Reject tokens that were not minted for this API. Without this, a
+          # token issued for ANY client in the realm would be accepted here.
+          audiences: playground-api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,mappings
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    # Uncomment to watch the whole security filter chain work. Verbose, but the
+    # single best way to understand what Spring Security is actually doing.
+    # org.springframework.security: DEBUG
+    # org.springframework.security.oauth2: TRACE
+    lu.zakaria.keycloak: DEBUG

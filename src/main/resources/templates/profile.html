@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+
+<main>
+  <h1>Who Spring thinks you are</h1>
+  <p class="lede">Everything below was derived from the ID token &mdash; not from a database in this app.
+    This app has no user table at all.</p>
+
+  <div class="card">
+    <h2 style="margin-top:0">Identity claims</h2>
+    <table>
+      <tr><th>Authentication type</th><td><code class="inline" th:text="${authType}">token</code></td></tr>
+      <tr><th>sub (stable user id)</th><td class="wrap" th:text="${user.subject}">uuid</td></tr>
+      <tr><th>preferred_username</th><td th:text="${user.preferredUsername}">alice</td></tr>
+      <tr><th>name</th><td th:text="${user.fullName}">Alice Anderson</td></tr>
+      <tr><th>email</th><td th:text="${user.email}">alice@playground.test</td></tr>
+      <tr><th>email_verified</th><td th:text="${user.emailVerified}">true</td></tr>
+      <tr><th>iss (issuer)</th><td class="wrap" th:text="${user.issuer}">http://localhost:8180/realms/playground</td></tr>
+      <tr><th>aud (audience)</th><td th:text="${user.audience}">spring-web</td></tr>
+      <tr><th>auth_time</th><td th:text="${user.authenticatedAt}">-</td></tr>
+      <tr><th>sid (SSO session)</th><td class="wrap" th:text="${user.claims['sid']}">-</td></tr>
+    </table>
+    <p class="note"><code class="inline">sub</code> is the only identifier you should store as a foreign key.
+      Usernames and emails change; <code class="inline">sub</code> never does.</p>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Granted authorities</h2>
+    <p>These are what <code class="inline">hasRole()</code> and <code class="inline">hasAuthority()</code> actually test.</p>
+    <div>
+      <span th:each="a : ${authorities}"
+            th:class="${#strings.startsWith(a.authority,'ROLE_')} ? 'pill role' : (${#strings.startsWith(a.authority,'SCOPE_')} ? 'pill scope' : 'pill')"
+            th:text="${a.authority}">ROLE_app-user</span>
+    </div>
+    <p class="note">The <span class="pill scope">SCOPE_*</span> entries come from Spring's defaults.
+      The <span class="pill role">ROLE_*</span> entries only exist because
+      <code class="inline">userAuthoritiesMapper()</code> reads
+      <code class="inline">realm_access.roles</code> out of the ID token. Delete that bean and
+      every role check in the app silently starts failing.</p>
+  </div>
+</main>
+</body>
+</html>

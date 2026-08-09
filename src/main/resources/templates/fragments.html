@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<header th:fragment="nav">
+  <nav>
+    <span class="brand">Keycloak Playground</span>
+    <a th:href="@{/}">Home</a>
+    <a th:href="@{/profile}" sec:authorize="isAuthenticated()">Profile</a>
+    <a th:href="@{/tokens}" sec:authorize="isAuthenticated()">Tokens</a>
+    <a th:href="@{/admin}" sec:authorize="hasRole('app-admin')">Admin</a>
+    <a href="http://localhost:8180/admin/master/console/#/playground" target="_blank">Keycloak console &#8599;</a>
+    <span class="spacer"></span>
+    <span class="who" sec:authorize="isAuthenticated()">
+      signed in as <strong sec:authentication="name">user</strong>
+    </span>
+    <a class="btn ghost" th:href="@{/oauth2/authorization/keycloak}" sec:authorize="!isAuthenticated()">Log in</a>
+    <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="margin:0">
+      <button class="btn ghost" type="submit">Log out</button>
+    </form>
+  </nav>
+</header>
+
+</body>
+</html>

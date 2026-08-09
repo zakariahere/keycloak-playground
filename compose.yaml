@@ -1,0 +1,77 @@
+# ---------------------------------------------------------------------------
+# Keycloak playground stack.
+#
+# Spring Boot's `spring-boot-docker-compose` module picks this file up at
+# startup, runs `docker compose up`, and blocks until every service with a
+# healthcheck reports healthy. So `./mvnw spring-boot:run` is the only command
+# you need -- Keycloak comes up with it.
+# ---------------------------------------------------------------------------
+services:
+
+  # Keycloak keeps ALL of its state (realms, clients, users, sessions, keys) in
+  # a relational database. In production this is the thing you back up.
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    volumes:
+      # Postgres 18+ images want the mount one level up, at /var/lib/postgresql.
+      # The old /var/lib/postgresql/data mount makes the image refuse to boot.
+      - keycloak-db:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak -d keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    labels:
+      # Without this, Boot's docker-compose support would try to auto-wire a
+      # DataSource for OUR app pointing at Keycloak's private database. This is
+      # Keycloak's database, not ours -- hands off.
+      org.springframework.boot.ignore: "true"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.7
+    # `start-dev` = HTTP allowed, no hostname strictness, dev-friendly caching.
+    # NEVER use it in production; there you use `start` + TLS + KC_HOSTNAME.
+    # `--import-realm` reads every *.json in /opt/keycloak/data/import on boot.
+    command: ["start-dev", "--import-realm"]
+    environment:
+      # Creates the *master realm* admin on very first boot only.
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      # Exposes /health/* on the separate management port 9000.
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      # Host 8180 -> container 8080. Keycloak always listens on 8080 INSIDE the
+      # container; only the host side moved (8080/8081 were already taken here).
+      # Issuer therefore becomes http://localhost:8180/realms/playground
+      - "8180:8080"
+      # Management port: health + metrics. Never expose this publicly in prod.
+      - "9180:9000"
+    volumes:
+      - ./docker/keycloak/import:/opt/keycloak/data/import:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      # The Keycloak image is distroless-ish: no curl, no wget. bash's /dev/tcp
+      # is the standard workaround for probing the readiness endpoint.
+      test:
+        - "CMD-SHELL"
+        - |
+          exec 3<>/dev/tcp/127.0.0.1/9000 &&
+          echo -e 'GET /health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 &&
+          cat <&3 | grep -q '"status": "UP"'
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 20s
+
+volumes:
+  keycloak-db:

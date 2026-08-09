@@ -1,0 +1,32 @@
+# Tests must not need a running Keycloak.
+#
+# `issuer-uri` is convenient but eager: Spring fetches
+# /.well-known/openid-configuration during context startup, so the whole
+# context fails if Keycloak is down. Spelling the endpoints out skips discovery
+# entirely -- nothing is contacted until a request actually needs a key.
+spring:
+  docker:
+    compose:
+      enabled: false
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            authorization-uri: http://localhost:8180/realms/playground/protocol/openid-connect/auth
+            token-uri: http://localhost:8180/realms/playground/protocol/openid-connect/token
+            user-info-uri: http://localhost:8180/realms/playground/protocol/openid-connect/userinfo
+            jwk-set-uri: http://localhost:8180/realms/playground/protocol/openid-connect/certs
+            user-name-attribute: preferred_username
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: spring-web
+            client-secret: spring-web-secret
+            authorization-grant-type: authorization_code
+            scope: openid,profile,email
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8180/realms/playground/protocol/openid-connect/certs
+          audiences: playground-api

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>API call</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+
+<main>
+  <h1>Server-side API call</h1>
+  <p class="lede">This app fetched its own access token and called the API over real HTTP.</p>
+
+  <div class="card">
+    <table>
+      <tr><th>Request</th><td><code class="inline">GET <span th:text="${path}">/api/me</span></code></td></tr>
+      <tr><th>Header sent</th><td><code class="inline">Authorization: Bearer &lt;access token&gt;</code></td></tr>
+      <tr><th>Status</th><td><span th:class="'status-' + ${status}" th:text="${status}">200</span></td></tr>
+      <tr th:if="${wwwAuthenticate != null}">
+        <th>WWW-Authenticate</th>
+        <td class="wrap"><code class="inline" th:text="${wwwAuthenticate}">Bearer ...</code></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Response body</h2>
+    <pre style="white-space:pre-wrap" th:text="${body}">{}</pre>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">Reading the status</h2>
+    <table>
+      <tr><th>200</th><td>Token valid, authority present.</td></tr>
+      <tr><th>401 Unauthorized</th><td>No token, expired token, bad signature, wrong issuer or wrong audience.
+        The <code class="inline">WWW-Authenticate</code> header above names the exact reason.</td></tr>
+      <tr><th>403 Forbidden</th><td>Token perfectly valid &mdash; the identity just lacks the required role.
+        401 means &ldquo;I don't know you&rdquo;; 403 means &ldquo;I know you, and no&rdquo;.</td></tr>
+    </table>
+    <p><a class="btn ghost" th:href="@{/tokens}">Back to the token inspector</a></p>
+  </div>
+</main>
+</body>
+</html>

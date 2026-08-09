@@ -1,0 +1,188 @@
+{
+  "realm": "playground",
+  "displayName": "Keycloak Playground",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": true,
+  "rememberMe": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "verifyEmail": false,
+
+  "accessTokenLifespan": 300,
+  "accessTokenLifespanForImplicitFlow": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "offlineSessionIdleTimeout": 2592000,
+  "refreshTokenMaxReuse": 0,
+  "revokeRefreshToken": false,
+
+  "roles": {
+    "realm": [
+      {
+        "name": "app-user",
+        "description": "Baseline access to the playground application"
+      },
+      {
+        "name": "app-admin",
+        "description": "Administrative access to the playground application"
+      }
+    ]
+  },
+
+  "defaultRoles": ["offline_access", "uma_authorization"],
+
+  "users": [
+    {
+      "username": "alice",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "alice@playground.test",
+      "firstName": "Alice",
+      "lastName": "Anderson",
+      "credentials": [
+        { "type": "password", "value": "alice", "temporary": false }
+      ],
+      "requiredActions": [],
+      "realmRoles": ["app-user"]
+    },
+    {
+      "username": "bob",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "bob@playground.test",
+      "firstName": "Bob",
+      "lastName": "Baker",
+      "credentials": [
+        { "type": "password", "value": "bob", "temporary": false }
+      ],
+      "requiredActions": [],
+      "realmRoles": ["app-user", "app-admin"]
+    },
+    {
+      "username": "service-account-backend-service",
+      "enabled": true,
+      "serviceAccountClientId": "backend-service",
+      "realmRoles": ["app-user", "app-admin"]
+    }
+  ],
+
+  "clients": [
+    {
+      "clientId": "spring-web",
+      "name": "Spring Web App (confidential, authorization code)",
+      "description": "Browser-facing Spring Boot app. Runs the Authorization Code flow with PKCE and holds a client secret server-side.",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "spring-web-secret",
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "redirectUris": ["http://localhost:8090/*"],
+      "webOrigins": ["http://localhost:8090"],
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost:8090/*",
+        "pkce.code.challenge.method": "S256",
+        "access.token.lifespan": "300"
+      },
+      "fullScopeAllowed": true,
+      "protocolMappers": [
+        {
+          "name": "realm-roles-into-id-token",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "claim.name": "realm_access.roles",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "false",
+            "userinfo.token.claim": "false"
+          }
+        },
+        {
+          "name": "playground-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "playground-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "backend-service",
+      "name": "Backend Service (confidential, client credentials)",
+      "description": "Machine-to-machine client. No human involved: it authenticates as itself with the client_credentials grant.",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "backend-service-secret",
+      "bearerOnly": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "redirectUris": [],
+      "webOrigins": [],
+      "fullScopeAllowed": true,
+      "protocolMappers": [
+        {
+          "name": "playground-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "playground-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "spa-demo",
+      "name": "SPA Demo (public, PKCE required)",
+      "description": "Public client: ships to the browser, so it CANNOT keep a secret. PKCE is mandatory instead.",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:8090/*",
+        "http://127.0.0.1:*/callback"
+      ],
+      "webOrigins": ["http://localhost:8090", "+"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "+"
+      },
+      "fullScopeAllowed": true,
+      "protocolMappers": [
+        {
+          "name": "playground-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "playground-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ]
+}
